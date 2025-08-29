@@ -1,4 +1,4 @@
- ### Hi, I'm Robin! 👋 
+ ### Hi, I'm Robin \(￣︶￣*\))! 👋 
 
 💻 Studying Computer Science<br/>
 
