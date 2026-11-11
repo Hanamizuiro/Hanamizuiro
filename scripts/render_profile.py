@@ -2,8 +2,8 @@
 
 import json
 import os
+from datetime import UTC, datetime
 from html import escape
-from itertools import count
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -15,25 +15,14 @@ THEMES = {
 }
 
 
-def github(path):
+def github_profile():
     headers = {"Accept": "application/vnd.github+json", "User-Agent": "Hanamizuiro-profile"}
     token = os.environ.get("GH_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
-    request = Request(f"https://api.github.com/users/{USERNAME}{path}", headers=headers)
+    request = Request(f"https://api.github.com/users/{USERNAME}", headers=headers)
     with urlopen(request, timeout=20) as response:
         return json.load(response)
-
-
-def public_stats():
-    profile = github("")
-    stars = 0
-    for page in count(1):
-        repos = github(f"/repos?type=owner&per_page=100&page={page}")
-        stars += sum(repo["stargazers_count"] for repo in repos if not repo["private"] and not repo["fork"])
-        if len(repos) < 100:
-            break
-    return profile["public_repos"], stars, profile["followers"]
 
 
 def braille_art():
@@ -52,9 +41,8 @@ def braille_art():
                     yield f'<circle cx="{x}" cy="{y}" r="1.35"/>'
 
 
-def render(theme, stats):
+def render(theme, profile, uptime_days):
     bg, bar, muted, heading, value = theme
-    repos, stars, followers = stats
     parts = [
         '<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-labelledby="title">',
         '<title id="title">Robin Navarro’s GitHub profile</title>',
@@ -74,9 +62,9 @@ def render(theme, stats):
 
     rows = (
         (105, "OS", "Windows 11, Arc Linux"),
-        (128, "Uptime", "—"),
-        (151, "Host", "—"),
-        (174, "Kernel", "—"),
+        (128, "Uptime", f"{uptime_days:,} days on GitHub"),
+        (151, "Host", "B550M Pro4"),
+        (174, "Kernel", "Windows NT 10.0.26200"),
         (197, "IDE", "VSCode, Neovim"),
         (232, "Languages.Programming", "Python, TypeScript, JavaScript, SQL"),
         (255, "Languages.Web", "HTML, CSS, Tailwind, React, TanStack Starter"),
@@ -92,8 +80,9 @@ def render(theme, stats):
             parts.append(f'<text x="430" y="{y}" fill="{heading}">{label}:</text>')
         parts.append(f'<text x="662" y="{y}" fill="{value}">{escape(content)}</text>')
 
-    for x, number, label in zip(
-        (430, 652, 874), (repos, stars, followers), ("Public repos", "Stars earned", "Followers")
+    for x, label, number in (
+        (430, "Public repos", profile["public_repos"]),
+        (662, "Followers", profile["followers"]),
     ):
         parts.append(
             f'<text x="{x}" y="488" fill="{heading}">{label}: '
@@ -103,6 +92,10 @@ def render(theme, stats):
 
 
 if __name__ == "__main__":
-    stats = public_stats()
+    profile = github_profile()
+    joined = datetime.fromisoformat(profile["created_at"])
+    uptime_days = (datetime.now(UTC).date() - joined.date()).days
     for name, theme in THEMES.items():
-        (ASSETS / f"profile-{name}.svg").write_text(render(theme, stats), encoding="utf-8", newline="\n")
+        (ASSETS / f"profile-{name}.svg").write_text(
+            render(theme, profile, uptime_days), encoding="utf-8", newline="\n"
+        )

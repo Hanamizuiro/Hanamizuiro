@@ -627,11 +627,11 @@
 <text x="430" y="105" fill="#795600">OS:</text>
 <text x="662" y="105" fill="#174d91">Windows 11, Arc Linux</text>
 <text x="430" y="128" fill="#795600">Uptime:</text>
-<text x="662" y="128" fill="#174d91">—</text>
+<text x="662" y="128" fill="#174d91">3,152 days on GitHub</text>
 <text x="430" y="151" fill="#795600">Host:</text>
-<text x="662" y="151" fill="#174d91">—</text>
+<text x="662" y="151" fill="#174d91">B550M Pro4</text>
 <text x="430" y="174" fill="#795600">Kernel:</text>
-<text x="662" y="174" fill="#174d91">—</text>
+<text x="662" y="174" fill="#174d91">Windows NT 10.0.26200</text>
 <text x="430" y="197" fill="#795600">IDE:</text>
 <text x="662" y="197" fill="#174d91">VSCode, Neovim</text>
 <text x="430" y="232" fill="#795600">Languages.Programming:</text>
@@ -650,7 +650,6 @@
 <text x="430" y="422" fill="#795600">LinkedIn:</text>
 <text x="662" y="422" fill="#174d91">robin-christian-navarro</text>
 <text x="430" y="488" fill="#795600">Public repos: <tspan fill="#174d91">25</tspan></text>
-<text x="652" y="488" fill="#795600">Stars earned: <tspan fill="#174d91">0</tspan></text>
-<text x="874" y="488" fill="#795600">Followers: <tspan fill="#174d91">4</tspan></text>
+<text x="662" y="488" fill="#795600">Followers: <tspan fill="#174d91">4</tspan></text>
 </g>
 </svg>
